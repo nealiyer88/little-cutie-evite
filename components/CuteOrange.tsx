@@ -1,4 +1,6 @@
-// Matches the reference: round body, two splayed leaves, closed sleepy eyes, rosy cheeks
+// Pixel-matched to reference image:
+// round peach body, two wide leaves, U-shaped eyes, U-shaped nose,
+// soft cheeks with rosy dot, no stem.
 
 type Props = {
   size?: number
@@ -9,68 +11,43 @@ type Props = {
 }
 
 export default function CuteOrange({ size = 60, x, y, rotation = 0, style = {} }: Props) {
-  const r = size / 2
-  // Center of the orange body — pushed down to leave room for leaves
-  const cx = size * 0.55
-  const cy = size * 0.62 + r
-
-  // Leaf bases sit just above the top of the circle
-  const leafBaseY = cy - r + size * 0.04
-
   return (
     <svg
-      width={size * 1.1}
-      height={size * 1.35}
-      viewBox={`0 0 ${size * 1.1} ${size * 1.35}`}
+      width={size}
+      height={size * 1.16}
+      viewBox="0 0 100 116"
       style={{ position: 'absolute', left: x, top: y, transform: `rotate(${rotation}deg)`, ...style }}
     >
-      {/* Left leaf */}
-      <ellipse
-        cx={cx - size * 0.13}
-        cy={leafBaseY - size * 0.08}
-        rx={size * 0.17}
-        ry={size * 0.1}
-        fill="#7A8E6F"
-        transform={`rotate(-40 ${cx - size * 0.13} ${leafBaseY - size * 0.08})`}
-      />
-      {/* Right leaf */}
-      <ellipse
-        cx={cx + size * 0.13}
-        cy={leafBaseY - size * 0.08}
-        rx={size * 0.17}
-        ry={size * 0.1}
-        fill="#8B9E82"
-        transform={`rotate(40 ${cx + size * 0.13} ${leafBaseY - size * 0.08})`}
-      />
+      {/* ── Leaves ─────────────────────────────────────── */}
+      <ellipse cx="35" cy="19" rx="17" ry="9" fill="#7A9070" transform="rotate(-40 35 19)" />
+      <ellipse cx="65" cy="19" rx="17" ry="9" fill="#A0BA9A" transform="rotate(40 65 19)" />
 
-      {/* Orange body */}
-      <circle cx={cx} cy={cy} r={r} fill="#E8914F" />
+      {/* ── Body ───────────────────────────────────────── */}
+      <circle cx="50" cy="70" r="44" fill="#F0A272" />
 
-      {/* Subtle darker ring for depth */}
-      <circle cx={cx} cy={cy} r={r * 0.93} fill="none" stroke="#D4793A" strokeWidth={1} opacity={0.18} />
+      {/* ── Cheeks: soft circle + rosy red dot ─────────── */}
+      <circle cx="24" cy="80" r="13" fill="#F9D0C8" opacity="0.75" />
+      <circle cx="24" cy="80" r="6"  fill="#E87070" opacity="0.60" />
 
-      {/* Rosy cheeks */}
-      <circle cx={cx - r * 0.44} cy={cy + r * 0.18} r={r * 0.26} fill="#F4A8A8" opacity={0.65} />
-      <circle cx={cx + r * 0.44} cy={cy + r * 0.18} r={r * 0.26} fill="#F4A8A8" opacity={0.65} />
+      <circle cx="76" cy="80" r="13" fill="#F9D0C8" opacity="0.75" />
+      <circle cx="76" cy="80" r="6"  fill="#E87070" opacity="0.60" />
 
-      {/* Eyes — closed sleepy arcs (∩ shaped) */}
+      {/* ── Eyes: U shapes (open at top, arc dips down) ── */}
+      {/* Left eye */}
       <path
-        d={`M ${cx - r * 0.38} ${cy - r * 0.08}
-            Q ${cx - r * 0.22} ${cy - r * 0.28}
-              ${cx - r * 0.06} ${cy - r * 0.08}`}
-        fill="none"
-        stroke="#3A2A1A"
-        strokeWidth={size * 0.045}
-        strokeLinecap="round"
+        d="M 31 62 Q 40 73 49 62"
+        fill="none" stroke="#3A2818" strokeWidth="4" strokeLinecap="round"
       />
+      {/* Right eye */}
       <path
-        d={`M ${cx + r * 0.06} ${cy - r * 0.08}
-            Q ${cx + r * 0.22} ${cy - r * 0.28}
-              ${cx + r * 0.38} ${cy - r * 0.08}`}
-        fill="none"
-        stroke="#3A2A1A"
-        strokeWidth={size * 0.045}
-        strokeLinecap="round"
+        d="M 51 62 Q 60 73 69 62"
+        fill="none" stroke="#3A2818" strokeWidth="4" strokeLinecap="round"
+      />
+
+      {/* ── Nose: small U shape centered below eyes ────── */}
+      <path
+        d="M 44 74 Q 50 81 56 74"
+        fill="none" stroke="#3A2818" strokeWidth="3" strokeLinecap="round"
       />
     </svg>
   )
