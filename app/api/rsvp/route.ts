@@ -1,11 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createServerClient } from '@/lib/supabase'
+import { sendConfirmationEmail } from '@/lib/email'
 
 const supabase = createServerClient()
 
 export async function POST(req: NextRequest) {
   const body = await req.json()
-  const { name, status, guest_count, note } = body
+  const { name, status, adult_count, child_count, email, note } = body
 
   if (!name?.trim() || !status) {
     return NextResponse.json({ error: 'Name and status are required.' }, { status: 400 })
@@ -14,7 +15,10 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Invalid status.' }, { status: 400 })
   }
 
-  // Check for existing RSVP (case-insensitive)
+  const adults = status === 'attending' ? (adult_count ?? 1) : 0
+  const children = status === 'attending' ? (child_count ?? 0) : 0
+
+  // Check for existing RSVP
   const { data: existing } = await supabase
     .from('rsvps')
     .select('*')
@@ -30,23 +34,28 @@ export async function POST(req: NextRequest) {
     .insert({
       name: name.trim(),
       status,
-      guest_count: status === 'attending' ? (guest_count ?? 1) : 1,
-      note: note || null,
+      adult_count: adults,
+      child_count: children,
+      guest_count: adults + children,
+      email: email?.trim() || null,
+      note: note?.trim() || null,
     })
     .select()
     .single()
 
   if (error) {
-    // Unique constraint violation (race condition)
     if (error.code === '23505') {
       const { data: existing2 } = await supabase
-        .from('rsvps')
-        .select('*')
-        .ilike('name', name.trim())
-        .maybeSingle()
+        .from('rsvps').select('*').ilike('name', name.trim()).maybeSingle()
       return NextResponse.json({ existing: existing2 }, { status: 409 })
     }
     return NextResponse.json({ error: error.message }, { status: 500 })
+  }
+
+  // Send confirmation email (no-op if RESEND_API_KEY not set)
+  if (email?.trim()) {
+    await sendConfirmationEmail({ to: email.trim(), name: name.trim(), status, adult_count: adults, child_count: children })
+      .catch(() => {}) // never fail the RSVP over email
   }
 
   return NextResponse.json({ rsvp: data })
@@ -54,23 +63,19 @@ export async function POST(req: NextRequest) {
 
 export async function PUT(req: NextRequest) {
   const body = await req.json()
-  const { name, status, guest_count, note } = body
+  const { name, status, adult_count, child_count, email, note } = body
 
   if (!name?.trim() || !status) {
     return NextResponse.json({ error: 'Name and status are required.' }, { status: 400 })
   }
-  if (!['attending', 'declined'].includes(status)) {
-    return NextResponse.json({ error: 'Invalid status.' }, { status: 400 })
-  }
 
-  // Find by name first to get the id
-  const { data: existing, error: findErr } = await supabase
-    .from('rsvps')
-    .select('id')
-    .ilike('name', name.trim())
-    .maybeSingle()
+  const adults = status === 'attending' ? (adult_count ?? 1) : 0
+  const children = status === 'attending' ? (child_count ?? 0) : 0
 
-  if (findErr || !existing) {
+  const { data: existing } = await supabase
+    .from('rsvps').select('id').ilike('name', name.trim()).maybeSingle()
+
+  if (!existing) {
     return NextResponse.json({ error: 'RSVP not found.' }, { status: 404 })
   }
 
@@ -78,8 +83,11 @@ export async function PUT(req: NextRequest) {
     .from('rsvps')
     .update({
       status,
-      guest_count: status === 'attending' ? (guest_count ?? 1) : 1,
-      note: note || null,
+      adult_count: adults,
+      child_count: children,
+      guest_count: adults + children,
+      email: email?.trim() || null,
+      note: note?.trim() || null,
     })
     .eq('id', existing.id)
     .select()
@@ -87,6 +95,11 @@ export async function PUT(req: NextRequest) {
 
   if (error) {
     return NextResponse.json({ error: error.message }, { status: 500 })
+  }
+
+  if (email?.trim()) {
+    await sendConfirmationEmail({ to: email.trim(), name: name.trim(), status, adult_count: adults, child_count: children })
+      .catch(() => {})
   }
 
   return NextResponse.json({ rsvp: data })

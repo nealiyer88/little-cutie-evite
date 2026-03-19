@@ -11,15 +11,17 @@ const ORANGE_MAIN = '#E8914F'
 const TEXT_DARK = '#2D3A28'
 const TEXT_MED = '#4A5A42'
 
-type SortKey = 'name' | 'status' | 'guest_count' | 'note' | 'created_at' | 'updated_at'
+type SortKey = 'name' | 'status' | 'adult_count' | 'child_count' | 'email' | 'note' | 'created_at'
 type SortDir = 'asc' | 'desc'
 
 const COL_LABELS: { key: SortKey; label: string; width?: string }[] = [
-  { key: 'name',       label: 'Name',      width: '22%' },
-  { key: 'status',     label: 'Status',    width: '14%' },
-  { key: 'guest_count',label: 'Guests',    width: '10%' },
-  { key: 'note',       label: 'Note',      width: '30%' },
-  { key: 'created_at', label: 'Submitted', width: '24%' },
+  { key: 'name',        label: 'Name',      width: '18%' },
+  { key: 'status',      label: 'Status',    width: '12%' },
+  { key: 'adult_count', label: 'Adults',    width: '8%'  },
+  { key: 'child_count', label: 'Kids',      width: '7%'  },
+  { key: 'email',       label: 'Email',     width: '20%' },
+  { key: 'note',        label: 'Note',      width: '20%' },
+  { key: 'created_at',  label: 'Submitted', width: '15%' },
 ]
 
 function Stat({ label, value, accent }: { label: string; value: number | string; accent?: boolean }) {
@@ -110,11 +112,12 @@ export default function AdminDashboard() {
   const totalGuests = attending.reduce((s, r) => s + r.guest_count, 0)
 
   const exportCSV = () => {
-    const headers = ['Name', 'Status', 'Guests', 'Note', 'Submitted At', 'Updated At']
+    const headers = ['Name', 'Status', 'Adults', 'Children', 'Email', 'Note', 'Submitted At']
     const rows = rsvps.map(r => [
-      r.name, r.status, r.guest_count, r.note ?? '',
+      r.name, r.status,
+      r.adult_count ?? r.guest_count, r.child_count ?? 0,
+      r.email ?? '', r.note ?? '',
       new Date(r.created_at).toLocaleString(),
-      new Date(r.updated_at).toLocaleString(),
     ])
     const csv = [headers, ...rows]
       .map(row => row.map(c => `"${String(c).replace(/"/g, '""')}"`).join(','))
@@ -202,9 +205,10 @@ export default function AdminDashboard() {
         {/* Stats */}
         <div style={{ display: 'flex', gap: 12, marginBottom: 28, flexWrap: 'wrap' }}>
           <Stat label="Total Guests" value={totalGuests} accent />
+          <Stat label="Adults" value={attending.reduce((s,r) => s + (r.adult_count ?? r.guest_count), 0)} />
+          <Stat label="Children" value={attending.reduce((s,r) => s + (r.child_count ?? 0), 0)} />
           <Stat label="Attending" value={attending.length} />
           <Stat label="Declined" value={declined.length} />
-          <Stat label="Total RSVPs" value={rsvps.length} />
         </div>
 
         {/* Table card */}
@@ -275,7 +279,13 @@ export default function AdminDashboard() {
                         </span>
                       </td>
                       <td style={{ padding: '12px 14px', color: TEXT_DARK, textAlign: 'center' }}>
-                        {r.status === 'attending' ? r.guest_count : '—'}
+                        {r.status === 'attending' ? (r.adult_count ?? r.guest_count) : '—'}
+                      </td>
+                      <td style={{ padding: '12px 14px', color: TEXT_DARK, textAlign: 'center' }}>
+                        {r.status === 'attending' ? (r.child_count ?? 0) : '—'}
+                      </td>
+                      <td style={{ padding: '12px 14px', color: TEXT_MED, fontSize: 13 }}>
+                        {r.email || <span style={{ opacity: 0.4 }}>—</span>}
                       </td>
                       <td style={{ padding: '12px 14px', color: TEXT_MED, fontStyle: r.note ? 'normal' : 'italic', fontSize: 14 }}>
                         {r.note || <span style={{ opacity: 0.4 }}>—</span>}

@@ -1,7 +1,3 @@
-// Pixel-matched to reference image:
-// round peach body, two wide leaves, U-shaped eyes, U-shaped nose,
-// soft cheeks with rosy dot, no stem.
-
 type Props = {
   size?: number
   x?: number | string
@@ -18,37 +14,23 @@ export default function CuteOrange({ size = 60, x, y, rotation = 0, style = {} }
       viewBox="0 0 100 116"
       style={{ position: 'absolute', left: x, top: y, transform: `rotate(${rotation}deg)`, ...style }}
     >
-      {/* ── Leaves ─────────────────────────────────────── */}
+      {/* Leaves */}
       <ellipse cx="35" cy="19" rx="17" ry="9" fill="#7A9070" transform="rotate(-40 35 19)" />
       <ellipse cx="65" cy="19" rx="17" ry="9" fill="#A0BA9A" transform="rotate(40 65 19)" />
 
-      {/* ── Body ───────────────────────────────────────── */}
+      {/* Body */}
       <circle cx="50" cy="70" r="44" fill="#F0A272" />
 
-      {/* ── Cheeks: soft circle + rosy red dot ─────────── */}
-      <circle cx="24" cy="80" r="13" fill="#F9D0C8" opacity="0.75" />
-      <circle cx="24" cy="80" r="6"  fill="#E87070" opacity="0.60" />
+      {/* Cheeks — single rosy dot, no halo */}
+      <circle cx="23" cy="79" r="9" fill="#E87878" opacity="0.65" />
+      <circle cx="77" cy="79" r="9" fill="#E87878" opacity="0.65" />
 
-      <circle cx="76" cy="80" r="13" fill="#F9D0C8" opacity="0.75" />
-      <circle cx="76" cy="80" r="6"  fill="#E87070" opacity="0.60" />
+      {/* Eyes — small U arcs, well separated */}
+      <path d="M 24 63 Q 32 72 40 63" fill="none" stroke="#3A2818" strokeWidth="3.5" strokeLinecap="round" />
+      <path d="M 60 63 Q 68 72 76 63" fill="none" stroke="#3A2818" strokeWidth="3.5" strokeLinecap="round" />
 
-      {/* ── Eyes: U shapes (open at top, arc dips down) ── */}
-      {/* Left eye */}
-      <path
-        d="M 31 62 Q 40 73 49 62"
-        fill="none" stroke="#3A2818" strokeWidth="4" strokeLinecap="round"
-      />
-      {/* Right eye */}
-      <path
-        d="M 51 62 Q 60 73 69 62"
-        fill="none" stroke="#3A2818" strokeWidth="4" strokeLinecap="round"
-      />
-
-      {/* ── Nose: small U shape centered below eyes ────── */}
-      <path
-        d="M 44 74 Q 50 81 56 74"
-        fill="none" stroke="#3A2818" strokeWidth="3" strokeLinecap="round"
-      />
+      {/* Nose — tiny U */}
+      <path d="M 46 75 Q 50 80 54 75" fill="none" stroke="#3A2818" strokeWidth="2.5" strokeLinecap="round" />
     </svg>
   )
 }
