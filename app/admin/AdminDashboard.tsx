@@ -15,13 +15,13 @@ type SortKey = 'name' | 'status' | 'adult_count' | 'child_count' | 'email' | 'no
 type SortDir = 'asc' | 'desc'
 
 const COL_LABELS: { key: SortKey; label: string; width?: string }[] = [
-  { key: 'name',        label: 'Name',      width: '18%' },
-  { key: 'status',      label: 'Status',    width: '12%' },
-  { key: 'adult_count', label: 'Adults',    width: '8%'  },
-  { key: 'child_count', label: 'Kids',      width: '7%'  },
-  { key: 'email',       label: 'Email',     width: '20%' },
-  { key: 'note',        label: 'Note',      width: '20%' },
-  { key: 'created_at',  label: 'Submitted', width: '15%' },
+  { key: 'name',        label: 'Name',      width: '17%' },
+  { key: 'status',      label: 'Status',    width: '11%' },
+  { key: 'adult_count', label: 'Adults',    width: '7%'  },
+  { key: 'child_count', label: 'Kids',      width: '6%'  },
+  { key: 'email',       label: 'Email',     width: '19%' },
+  { key: 'note',        label: 'Note',      width: '19%' },
+  { key: 'created_at',  label: 'Submitted', width: '14%' },
 ]
 
 function Stat({ label, value, accent }: { label: string; value: number | string; accent?: boolean }) {
@@ -131,6 +131,16 @@ export default function AdminDashboard() {
     a.click()
     document.body.removeChild(a)
     URL.revokeObjectURL(url)
+  }
+
+  const handleDelete = async (id: string, name: string) => {
+    if (!confirm(`Delete RSVP for ${name}?`)) return
+    await fetch('/api/admin/rsvps', {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id }),
+    })
+    setRsvps(prev => prev.filter(r => r.id !== id))
   }
 
   const logout = async () => {
@@ -249,6 +259,7 @@ export default function AdminDashboard() {
                         {col.label} {arrow(col.key)}
                       </th>
                     ))}
+                    <th style={{ width: '7%', padding: '12px 14px' }} />
                   </tr>
                 </thead>
                 <tbody>
@@ -299,6 +310,23 @@ export default function AdminDashboard() {
                             hour: 'numeric', minute: '2-digit',
                           })}
                         </span>
+                      </td>
+                      <td style={{ padding: '12px 14px', textAlign: 'center' }}>
+                        <button
+                          onClick={() => handleDelete(r.id, r.name)}
+                          style={{
+                            background: 'none', border: 'none',
+                            cursor: 'pointer', color: '#A03030',
+                            fontSize: 15, opacity: 0.6,
+                            padding: '2px 6px', borderRadius: 4,
+                            transition: 'opacity 0.15s',
+                          }}
+                          onMouseEnter={e => (e.currentTarget.style.opacity = '1')}
+                          onMouseLeave={e => (e.currentTarget.style.opacity = '0.6')}
+                          title="Delete"
+                        >
+                          ✕
+                        </button>
                       </td>
                     </tr>
                   ))}
