@@ -286,9 +286,9 @@ export default function EvitePage() {
                   {/* Email */}
                   <input
                     type="email"
-                    placeholder="Email (for confirmation)"
+                    placeholder="Email address (required)"
                     value={email}
-                    onChange={e => setEmail(e.target.value)}
+                    onChange={e => { setEmail(e.target.value); setExistingRsvp(null); setError(null) }}
                     style={field}
                   />
 
@@ -335,8 +335,8 @@ export default function EvitePage() {
                         fontFamily: "'Cormorant Garamond', serif",
                         fontSize: 15, color: TEXT_DARK, marginBottom: 12, lineHeight: 1.5,
                       }}>
-                        <strong>{existingRsvp.name}</strong> already RSVPed as <strong>{existingRsvp.status}</strong>
-                        {existingRsvp.status === 'attending' && ` (${existingRsvp.adult_count ?? existingRsvp.guest_count} adults, ${existingRsvp.child_count ?? 0} children)`}. Want to update?
+                        This email has already RSVPed as <strong>{existingRsvp.status}</strong>
+                        {existingRsvp.status === 'attending' && ` (${existingRsvp.adult_count ?? existingRsvp.guest_count} adults, ${existingRsvp.child_count ?? 0} children)`}. Would you like to update your response?
                       </p>
                       <div style={{ display: 'flex', gap: 8 }}>
                         <button
@@ -377,14 +377,14 @@ export default function EvitePage() {
                   {!existingRsvp && (
                     <button
                       onClick={() => handleSubmit(false)}
-                      disabled={loading || !name.trim()}
+                      disabled={loading || !name.trim() || !email.trim()}
                       style={{
                         fontFamily: "'Cormorant Garamond', serif",
                         fontSize: 14, fontWeight: 600, letterSpacing: '2px',
                         textTransform: 'uppercase', padding: '14px 40px',
                         border: 'none', background: TEXT_DARK, color: CREAM,
-                        cursor: (loading || !name.trim()) ? 'not-allowed' : 'pointer',
-                        borderRadius: 4, opacity: (loading || !name.trim()) ? 0.5 : 1,
+                        cursor: (loading || !name.trim() || !email.trim()) ? 'not-allowed' : 'pointer',
+                        borderRadius: 4, opacity: (loading || !name.trim() || !email.trim()) ? 0.5 : 1,
                         transition: 'opacity 0.2s', width: '100%',
                       }}
                     >
