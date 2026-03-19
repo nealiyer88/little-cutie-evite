@@ -1,3 +1,5 @@
+// Simple decorative orange for RSVP page — same palette, no fuss
+
 type Props = {
   size?: number
   x?: number | string
@@ -7,30 +9,48 @@ type Props = {
 }
 
 export default function CuteOrange({ size = 60, x, y, rotation = 0, style = {} }: Props) {
+  const cx = size / 2
+  const cy = size / 2 + size * 0.12
+  const r  = size * 0.42
+
   return (
     <svg
       width={size}
-      height={size * 1.16}
-      viewBox="0 0 100 116"
+      height={size * 1.18}
+      viewBox={`0 0 ${size} ${size * 1.18}`}
       style={{ position: 'absolute', left: x, top: y, transform: `rotate(${rotation}deg)`, ...style }}
     >
-      {/* Leaves */}
-      <ellipse cx="35" cy="19" rx="17" ry="9" fill="#7A9070" transform="rotate(-40 35 19)" />
-      <ellipse cx="65" cy="19" rx="17" ry="9" fill="#A0BA9A" transform="rotate(40 65 19)" />
+      {/* Left leaf */}
+      <ellipse
+        cx={cx - size * 0.1} cy={size * 0.1}
+        rx={size * 0.14} ry={size * 0.08}
+        fill="#7A9070"
+        transform={`rotate(-35 ${cx - size * 0.1} ${size * 0.1})`}
+      />
+      {/* Right leaf */}
+      <ellipse
+        cx={cx + size * 0.1} cy={size * 0.08}
+        rx={size * 0.13} ry={size * 0.07}
+        fill="#9DB59D"
+        transform={`rotate(35 ${cx + size * 0.1} ${size * 0.08})`}
+      />
 
       {/* Body */}
-      <circle cx="50" cy="70" r="44" fill="#F0A272" />
+      <circle cx={cx} cy={cy} r={r} fill="#F0A272" />
 
-      {/* Cheeks — single rosy dot, no halo */}
-      <circle cx="23" cy="79" r="9" fill="#E87878" opacity="0.65" />
-      <circle cx="77" cy="79" r="9" fill="#E87878" opacity="0.65" />
+      {/* Cheeks */}
+      <circle cx={cx - r * 0.52} cy={cy + r * 0.18} r={r * 0.18} fill="#E87878" opacity={0.6} />
+      <circle cx={cx + r * 0.52} cy={cy + r * 0.18} r={r * 0.18} fill="#E87878" opacity={0.6} />
 
-      {/* Eyes — small U arcs, well separated */}
-      <path d="M 24 63 Q 32 72 40 63" fill="none" stroke="#3A2818" strokeWidth="3.5" strokeLinecap="round" />
-      <path d="M 60 63 Q 68 72 76 63" fill="none" stroke="#3A2818" strokeWidth="3.5" strokeLinecap="round" />
+      {/* Eyes — two simple dots */}
+      <circle cx={cx - r * 0.32} cy={cy - r * 0.12} r={r * 0.07} fill="#3A2818" />
+      <circle cx={cx + r * 0.32} cy={cy - r * 0.12} r={r * 0.07} fill="#3A2818" />
 
-      {/* Nose — tiny U */}
-      <path d="M 46 75 Q 50 80 54 75" fill="none" stroke="#3A2818" strokeWidth="2.5" strokeLinecap="round" />
+      {/* Smile */}
+      <path
+        d={`M ${cx - r * 0.22} ${cy + r * 0.18} Q ${cx} ${cy + r * 0.38} ${cx + r * 0.22} ${cy + r * 0.18}`}
+        fill="none" stroke="#3A2818" strokeWidth={r * 0.09} strokeLinecap="round"
+      />
     </svg>
   )
 }

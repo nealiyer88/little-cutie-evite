@@ -131,79 +131,40 @@ export default function EvitePage() {
         {page === 'front' && (
           <div
             className="fade-in"
-            style={{ ...cardBase, padding: '48px 32px 36px', textAlign: 'center', cursor: 'pointer' }}
+            style={{
+              position: 'relative',
+              cursor: 'pointer',
+              borderRadius: 16,
+              overflow: 'hidden',
+              boxShadow: '0 8px 40px rgba(45,58,40,0.18), 0 2px 8px rgba(45,58,40,0.08)',
+              display: 'block',
+              lineHeight: 0,
+            }}
             onClick={() => setPage('details')}
           >
-            {/* Scallop top */}
-            <div style={{
-              position: 'absolute', top: 0, left: 0, right: 0, height: 20,
-              background: `radial-gradient(circle 10px at 10px 0, transparent 10px, ${SAGE_LIGHT} 10px)`,
-              backgroundSize: '20px 20px',
-            }} />
-            {/* Scallop bottom */}
-            <div style={{
-              position: 'absolute', bottom: 0, left: 0, right: 0, height: 20,
-              background: `radial-gradient(circle 10px at 10px 20px, transparent 10px, ${SAGE_LIGHT} 10px)`,
-              backgroundSize: '20px 20px',
-            }} />
+            {/* The card image — drop public/card-front.jpg to activate */}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/card-front.png"
+              alt="Olivia's first birthday invitation"
+              style={{ width: '100%', height: 'auto', display: 'block' }}
+            />
 
-            {/* Decorative oranges */}
-            <CuteOrange size={44} x={-6} y={36} rotation={-12} />
-            <CuteOrange size={38} x={18} y={260} rotation={8} />
-            <CuteOrange size={42} x="76%" y={18} rotation={15} />
-            <CuteOrange size={36} x="81%" y={230} rotation={-5} />
-            <CuteOrange size={34} x="55%" y={28} rotation={-18} />
-            <Leaf x={58} y={75} rotation={-40} size={0.85} />
-            <Leaf x="70%" y={95} rotation={30} size={0.75} />
-            <Leaf x={38} y={190} rotation={60} size={0.65} color={SAGE} />
-            <Leaf x="66%" y={180} rotation={-20} size={0.8} />
-            <Leaf x={28} y={125} rotation={20} size={0.65} />
-
-            <div style={{ position: 'relative', zIndex: 2, padding: '36px 10px 8px' }}>
-              <p style={{
-                fontFamily: "'Cormorant Garamond', serif",
-                fontSize: 16, color: TEXT_MED, letterSpacing: '0.5px',
-                marginBottom: 8, fontStyle: 'italic',
-              }}>
-                Please join us in celebrating our
-              </p>
-              <h1 style={{
-                fontFamily: "'Playfair Display', serif",
-                fontSize: 52, fontWeight: 700, color: TEXT_DARK,
-                lineHeight: 1.1, margin: '8px 0 4px', letterSpacing: '-0.5px',
-              }}>
-                little<br />cutie&apos;s
-              </h1>
-              <p style={{
-                fontFamily: "'Cormorant Garamond', serif",
-                fontSize: 18, color: TEXT_MED, letterSpacing: '1.5px',
-                marginTop: 4, fontStyle: 'italic',
-              }}>
-                first birthday
-              </p>
-              <p style={{
-                fontFamily: "'Playfair Display', serif",
-                fontSize: 22, fontWeight: 600, color: ORANGE_MAIN,
-                marginTop: 10, letterSpacing: '0.5px',
-              }}>
-                Olivia Iyer
-              </p>
-            </div>
-
+            {/* Tap to open overlay — bottom center */}
             <div style={{
-              position: 'relative', zIndex: 10,
-              display: 'flex', justifyContent: 'center',
-              marginTop: 20, paddingBottom: 10,
+              position: 'absolute', bottom: 20, left: 0, right: 0,
+              display: 'flex', justifyContent: 'center', zIndex: 10,
             }}>
               <span style={{
                 fontFamily: "'Cormorant Garamond', serif",
                 fontSize: 13, color: SAGE,
                 letterSpacing: '1.5px', textTransform: 'uppercase',
                 animation: 'pulse 2s ease-in-out infinite',
-                background: CREAM,
-                padding: '6px 20px',
+                background: 'rgba(253,251,247,0.92)',
+                padding: '7px 22px',
                 borderRadius: 20,
                 border: `1.5px solid ${SAGE_LIGHT}`,
+                backdropFilter: 'blur(4px)',
               }}>
                 tap to open ›
               </span>
