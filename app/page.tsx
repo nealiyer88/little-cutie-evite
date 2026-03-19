@@ -191,15 +191,25 @@ export default function EvitePage() {
               </p>
             </div>
 
-            <p style={{
-              position: 'relative', zIndex: 2,
-              fontFamily: "'Cormorant Garamond', serif",
-              fontSize: 13, color: SAGE, marginTop: 30,
-              letterSpacing: '1px', textTransform: 'uppercase',
-              animation: 'pulse 2s ease-in-out infinite',
+            <div style={{
+              position: 'relative', zIndex: 10,
+              display: 'flex', justifyContent: 'center',
+              marginTop: 24, paddingBottom: 8,
             }}>
-              tap to open ›
-            </p>
+              <span style={{
+                fontFamily: "'Cormorant Garamond', serif",
+                fontSize: 13, color: SAGE,
+                letterSpacing: '1.5px', textTransform: 'uppercase',
+                animation: 'pulse 2s ease-in-out infinite',
+                background: CREAM,
+                padding: '6px 18px',
+                borderRadius: 20,
+                border: `1.5px solid ${SAGE_LIGHT}`,
+                display: 'inline-block',
+              }}>
+                tap to open ›
+              </span>
+            </div>
           </div>
         )}
 

@@ -1,9 +1,4 @@
-const ORANGE_MAIN = '#E8914F'
-const ORANGE_DARK = '#D4793A'
-const ORANGE_CHEEK = '#F2A66A'
-const LEAF_GREEN = '#7A8E6F'
-const SAGE = '#8B9E82'
-const TEXT_DARK = '#2D3A28'
+// Matches the reference: round body, two splayed leaves, closed sleepy eyes, rosy cheeks
 
 type Props = {
   size?: number
@@ -15,51 +10,67 @@ type Props = {
 
 export default function CuteOrange({ size = 60, x, y, rotation = 0, style = {} }: Props) {
   const r = size / 2
-  const leafH = size * 0.3
+  // Center of the orange body — pushed down to leave room for leaves
+  const cx = size * 0.55
+  const cy = size * 0.62 + r
+
+  // Leaf bases sit just above the top of the circle
+  const leafBaseY = cy - r + size * 0.04
 
   return (
     <svg
-      width={size * 1.2}
-      height={size * 1.4}
-      viewBox={`0 0 ${size * 1.2} ${size * 1.4}`}
+      width={size * 1.1}
+      height={size * 1.35}
+      viewBox={`0 0 ${size * 1.1} ${size * 1.35}`}
       style={{ position: 'absolute', left: x, top: y, transform: `rotate(${rotation}deg)`, ...style }}
     >
-      {/* stem */}
-      <line
-        x1={size * 0.6} y1={leafH + 2}
-        x2={size * 0.6} y2={leafH + size * 0.15}
-        stroke={LEAF_GREEN} strokeWidth={2.5} strokeLinecap="round"
-      />
-      {/* leaf left */}
+      {/* Left leaf */}
       <ellipse
-        cx={size * 0.45} cy={leafH * 0.6}
-        rx={size * 0.14} ry={size * 0.08}
-        fill={LEAF_GREEN}
-        transform={`rotate(-30 ${size * 0.45} ${leafH * 0.6})`}
+        cx={cx - size * 0.13}
+        cy={leafBaseY - size * 0.08}
+        rx={size * 0.17}
+        ry={size * 0.1}
+        fill="#7A8E6F"
+        transform={`rotate(-40 ${cx - size * 0.13} ${leafBaseY - size * 0.08})`}
       />
-      {/* leaf right */}
+      {/* Right leaf */}
       <ellipse
-        cx={size * 0.75} cy={leafH * 0.5}
-        rx={size * 0.12} ry={size * 0.07}
-        fill={SAGE}
-        transform={`rotate(25 ${size * 0.75} ${leafH * 0.5})`}
+        cx={cx + size * 0.13}
+        cy={leafBaseY - size * 0.08}
+        rx={size * 0.17}
+        ry={size * 0.1}
+        fill="#8B9E82"
+        transform={`rotate(40 ${cx + size * 0.13} ${leafBaseY - size * 0.08})`}
       />
-      {/* body */}
-      <circle cx={size * 0.6} cy={leafH + r} r={r} fill={ORANGE_MAIN} />
-      <circle cx={size * 0.6} cy={leafH + r} r={r * 0.92} fill="none" stroke={ORANGE_DARK} strokeWidth={1} opacity={0.3} />
-      {/* cheeks */}
-      <circle cx={size * 0.38} cy={leafH + r + size * 0.1} r={size * 0.08} fill={ORANGE_CHEEK} opacity={0.6} />
-      <circle cx={size * 0.82} cy={leafH + r + size * 0.1} r={size * 0.08} fill={ORANGE_CHEEK} opacity={0.6} />
-      {/* eyes */}
-      <circle cx={size * 0.47} cy={leafH + r - size * 0.04} r={size * 0.035} fill={TEXT_DARK} />
-      <circle cx={size * 0.73} cy={leafH + r - size * 0.04} r={size * 0.035} fill={TEXT_DARK} />
-      {/* eye shine */}
-      <circle cx={size * 0.48} cy={leafH + r - size * 0.06} r={size * 0.012} fill="white" />
-      <circle cx={size * 0.74} cy={leafH + r - size * 0.06} r={size * 0.012} fill="white" />
-      {/* smile */}
+
+      {/* Orange body */}
+      <circle cx={cx} cy={cy} r={r} fill="#E8914F" />
+
+      {/* Subtle darker ring for depth */}
+      <circle cx={cx} cy={cy} r={r * 0.93} fill="none" stroke="#D4793A" strokeWidth={1} opacity={0.18} />
+
+      {/* Rosy cheeks */}
+      <circle cx={cx - r * 0.44} cy={cy + r * 0.18} r={r * 0.26} fill="#F4A8A8" opacity={0.65} />
+      <circle cx={cx + r * 0.44} cy={cy + r * 0.18} r={r * 0.26} fill="#F4A8A8" opacity={0.65} />
+
+      {/* Eyes — closed sleepy arcs (∩ shaped) */}
       <path
-        d={`M ${size * 0.52} ${leafH + r + size * 0.06} Q ${size * 0.6} ${leafH + r + size * 0.14} ${size * 0.68} ${leafH + r + size * 0.06}`}
-        fill="none" stroke={TEXT_DARK} strokeWidth={1.8} strokeLinecap="round"
+        d={`M ${cx - r * 0.38} ${cy - r * 0.08}
+            Q ${cx - r * 0.22} ${cy - r * 0.28}
+              ${cx - r * 0.06} ${cy - r * 0.08}`}
+        fill="none"
+        stroke="#3A2A1A"
+        strokeWidth={size * 0.045}
+        strokeLinecap="round"
+      />
+      <path
+        d={`M ${cx + r * 0.06} ${cy - r * 0.08}
+            Q ${cx + r * 0.22} ${cy - r * 0.28}
+              ${cx + r * 0.38} ${cy - r * 0.08}`}
+        fill="none"
+        stroke="#3A2A1A"
+        strokeWidth={size * 0.045}
+        strokeLinecap="round"
       />
     </svg>
   )
