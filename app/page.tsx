@@ -189,9 +189,22 @@ export default function EvitePage() {
 
               <p style={{
                 fontFamily: "'Cormorant Garamond', serif",
-                fontSize: 15, color: TEXT_MED, letterSpacing: '0.5px', marginBottom: 4,
+                fontSize: 15, color: TEXT_MED, letterSpacing: '1px', marginBottom: 6,
               }}>
-                You&apos;re Invited
+                Join us in celebrating
+              </p>
+              <h2 style={{
+                fontFamily: "'Playfair Display', serif",
+                fontSize: 30, fontWeight: 700, color: TEXT_DARK,
+                margin: '0 0 4px', letterSpacing: '0.5px',
+              }}>
+                Olivia Linh Iyer&apos;s
+              </h2>
+              <p style={{
+                fontFamily: "'Cormorant Garamond', serif",
+                fontSize: 17, color: TEXT_MED, marginBottom: 4,
+              }}>
+                very first birthday! 🍊
               </p>
               <div style={{ width: 40, height: 2, background: SAGE_LIGHT, margin: '12px auto 20px', borderRadius: 1 }} />
 
@@ -228,17 +241,7 @@ export default function EvitePage() {
                 fontFamily: "'Cormorant Garamond', serif",
                 fontSize: 15, lineHeight: 1.75, color: TEXT_MED, marginBottom: 24,
               }}>
-                <h2 style={{
-                  fontFamily: "'Playfair Display', serif",
-                  fontSize: 28, fontWeight: 700, color: TEXT_DARK,
-                  margin: '0 0 6px', letterSpacing: '0.5px',
-                }}>
-                  Olivia Linh Iyer
-                </h2>
-                <p style={{ fontWeight: 500, marginBottom: 2 }}>
-                  Join us in celebrating our little one&apos;s<br />very first birthday! 🍊
-                </p>
-                <div style={{ width: 30, height: 1, background: SAGE_LIGHT, margin: '14px auto' }} />
+                <div style={{ width: 30, height: 1, background: SAGE_LIGHT, margin: '0 auto 14px' }} />
                 <p>
                   <strong style={{ fontWeight: 600, color: TEXT_DARK }}>Sunday, May 17th, 2026</strong><br />
                   10:30 AM – 1:30 PM<br />
