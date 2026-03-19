@@ -145,7 +145,7 @@ export default function EvitePage() {
             {/* The card image — drop public/card-front.jpg to activate */}
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src="/card-front.png"
+              src="/card_front_updated.png"
               alt="Olivia's first birthday invitation"
               style={{ width: '100%', height: 'auto', display: 'block' }}
             />
@@ -228,6 +228,13 @@ export default function EvitePage() {
                 fontFamily: "'Cormorant Garamond', serif",
                 fontSize: 15, lineHeight: 1.75, color: TEXT_MED, marginBottom: 24,
               }}>
+                <h2 style={{
+                  fontFamily: "'Playfair Display', serif",
+                  fontSize: 28, fontWeight: 700, color: TEXT_DARK,
+                  margin: '0 0 6px', letterSpacing: '0.5px',
+                }}>
+                  Olivia Linh Iyer
+                </h2>
                 <p style={{ fontWeight: 500, marginBottom: 2 }}>
                   Join us in celebrating our little one&apos;s<br />very first birthday! 🍊
                 </p>
