@@ -144,7 +144,7 @@ export default function EvitePage() {
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src="/card_front_updated.png"
+              src="/card_front_updated.jpeg"
               alt="Olivia's first birthday invitation"
               style={{ width: '100%', height: 'auto', display: 'block' }}
             />
