@@ -137,12 +137,11 @@ export default function EvitePage() {
               borderRadius: 16,
               overflow: 'hidden',
               boxShadow: '0 8px 40px rgba(45,58,40,0.18), 0 2px 8px rgba(45,58,40,0.08)',
-              display: 'block',
+              background: CREAM,
               lineHeight: 0,
             }}
             onClick={() => setPage('details')}
           >
-            {/* The card image — drop public/card-front.jpg to activate */}
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="/card_front_updated.png"
