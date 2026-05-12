@@ -59,6 +59,7 @@ export default function AdminDashboard() {
   const [sortKey, setSortKey] = useState<SortKey>('created_at')
   const [sortDir, setSortDir] = useState<SortDir>('desc')
   const [lastUpdate, setLastUpdate] = useState<Date | null>(null)
+  const [sendingReminders, setSendingReminders] = useState(false)
 
   const markUpdate = useCallback(() => setLastUpdate(new Date()), [])
 
@@ -143,6 +144,32 @@ export default function AdminDashboard() {
     setRsvps(prev => prev.filter(r => r.id !== id))
   }
 
+  const sendReminders = async () => {
+    const attendingWithEmail = attending.filter(r => r.email?.trim())
+    if (attendingWithEmail.length === 0) {
+      alert('No attending guests with email addresses.')
+      return
+    }
+    if (!confirm(`Send reminder emails to ${attendingWithEmail.length} attending guest${attendingWithEmail.length !== 1 ? 's' : ''}?`)) return
+
+    setSendingReminders(true)
+    try {
+      const res = await fetch('/api/admin/remind', { method: 'POST' })
+      const data = await res.json()
+      if (!res.ok) {
+        alert(`Failed: ${data.error ?? 'Unknown error'}`)
+      } else {
+        const skipMsg = data.skipped ? ` (${data.skipped} skipped — no email)` : ''
+        const failMsg = data.failed ? `, ${data.failed} failed` : ''
+        alert(`Sent ${data.sent} reminder${data.sent !== 1 ? 's' : ''}${failMsg}${skipMsg}.`)
+      }
+    } catch (err) {
+      alert(`Failed: ${err instanceof Error ? err.message : String(err)}`)
+    } finally {
+      setSendingReminders(false)
+    }
+  }
+
   const logout = async () => {
     await fetch('/api/admin/logout', { method: 'POST' })
     window.location.href = '/admin'
@@ -184,6 +211,24 @@ export default function AdminDashboard() {
             </p>
           </div>
           <div style={{ display: 'flex', gap: 8 }}>
+            <button
+              onClick={sendReminders}
+              disabled={sendingReminders}
+              style={{
+                fontFamily: "'Cormorant Garamond', serif",
+                fontSize: 13, fontWeight: 600, letterSpacing: '1.5px',
+                textTransform: 'uppercase', padding: '9px 18px',
+                border: `2px solid ${ORANGE_MAIN}`,
+                background: sendingReminders ? SAGE_LIGHT : ORANGE_MAIN,
+                color: CREAM,
+                cursor: sendingReminders ? 'not-allowed' : 'pointer',
+                borderRadius: 4,
+                transition: 'all 0.2s',
+                opacity: sendingReminders ? 0.7 : 1,
+              }}
+            >
+              {sendingReminders ? 'Sending…' : 'Send Reminders'}
+            </button>
             <button
               onClick={exportCSV}
               style={{
